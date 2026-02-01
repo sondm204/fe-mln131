@@ -1,23 +1,26 @@
 import { useState } from 'react';
 import './App.css';
 import Navigation from './components/Navigation';
+import HomePage from './components/HomePage';
 import InfoPage from './components/InfoPage';
-import QuizGame from './components/QuizGame'; // Giả sử bạn đã có
-import Chatbot from './components/Chatbot';   // Giả sử bạn đã có
+import QuizGame from './components/QuizGame';
+import Chatbot from './components/Chatbot';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('info');
+  const [currentPage, setCurrentPage] = useState('home');
 
   const renderPage = () => {
     switch (currentPage) {
+      case 'home':
+        return <HomePage onNavigate={setCurrentPage} />;
       case 'info':
-        return <InfoPage />;
+        return <InfoPage onNavigate={setCurrentPage} />;
       case 'quiz':
         return <QuizGame />;
       case 'chatbot':
         return <Chatbot />;
       default:
-        return <InfoPage />;
+        return <HomePage onNavigate={setCurrentPage} />;
     }
   };
 

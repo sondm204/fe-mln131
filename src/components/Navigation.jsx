@@ -2,6 +2,7 @@ import React from 'react';
 
 function Navigation({ onNavigate, currentPage }) {
   const navItems = [
+    { id: 'home', label: '🏠 Trang Chủ', color: '#0071e3' },
     { id: 'info', label: '📖 Kiến Thức', color: '#0071e3' },
     { id: 'quiz', label: '🎮 Trắc Nghiệm', color: '#34c759' },
     { id: 'chatbot', label: '🤖 Trợ Lý AI', color: '#af52de' }

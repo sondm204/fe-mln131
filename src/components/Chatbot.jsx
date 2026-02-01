@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import './Chatbot.css';
+import { API_CONFIG } from '../config/api';
 
 function Chatbot() {
   const [messages, setMessages] = useState([
@@ -9,6 +11,7 @@ function Chatbot() {
     }
   ]);
   const [inputText, setInputText] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -19,59 +22,67 @@ function Chatbot() {
     scrollToBottom();
   }, [messages]);
 
-  const knowledgeBase = {
-    "xin chào|chào|hello|hi": "Xin chào! Tôi rất vui được trò chuyện với bạn về triết học Mác-Lênin. Bạn muốn tìm hiểu về điều gì?",
-    
-    "duy vật biện chứng|biện chứng|dialectic": "Duy vật biện chứng là học thuyết về những quy luật vận động và phát triển phổ biến nhất của tự nhiên, xã hội và tư duy. Nó bao gồm ba quy luật cơ bản:\n\n1️⃣ Quy luật chuyển hóa từ lượng sang chất và ngược lại\n2️⃣ Quy luật thống nhất và đấu tranh của các mặt đối lập\n3️⃣ Quy luật phủ định của phủ định\n\nBạn muốn tìm hiểu sâu về quy luật nào?",
-    
-    "duy vật lịch sử|lịch sử|historical materialism": "Duy vật lịch sử là sự vận dụng nguyên lý duy vật biện chứng vào nghiên cứu xã hội và lịch sử loài người. Nó khẳng định:\n\n🔹 Phương thức sản xuất vật chất quyết định bản chất của đời sống xã hội\n🔹 Tồn tại xã hội quyết định ý thức xã hội\n🔹 Lực lượng sản xuất quyết định quan hệ sản xuất\n🔹 Cơ sở hạ tầng (kinh tế) quyết định kiến trúc thượng tầng (chính trị, pháp luật, tư tưởng)",
-    
-    "thực tiễn|practice|lý luận và thực tiễn": "Thực tiễn là hoạt động vật chất, có mục đích, mang tính lịch sử - xã hội của con người nhằm cải biến tự nhiên và xã hội.\n\n⚡ Vai trò của thực tiễn:\n• Cơ sở của nhận thức\n• Động lực của nhận thức\n• Mục đích của nhận thức\n• Tiêu chuẩn của chân lý\n\nThực tiễn và lý luận có quan hệ biện chứng với nhau.",
-    
-    "karl marx|marx|mác": "Karl Marx (1818-1883) là nhà triết học, kinh tế học và nhà tư tưởng cách mạng người Đức, người sáng lập chủ nghĩa Mác.\n\n📚 Tác phẩm quan trọng:\n• Tuyên ngôn của Đảng Cộng sản (1848)\n• Tư bản (Das Kapital) - 3 tập\n• Luận cương về Feuerbach\n• Hình thái ý thức\n\nMarx đã phát triển học thuyết về giá trị thизлишная, đấu tranh giai cấp và cách mạng xã hội chủ nghĩa.",
-    
-    "lenin|lênin": "Vladimir Ilyich Lenin (1870-1924) là nhà lãnh đạo cách mạng người Nga, người đã phát triển chủ nghĩa Mác trong điều kiện lịch sử mới.\n\n🌟 Đóng góp chính:\n• Học thuyết về đế quốc chủ nghĩa\n• Lý luận về cách mạng vô sản\n• Học thuyết về Đảng của giai cấp công nhân\n• Lãnh đạo Cách mạng Tháng Mười Nga thành công (1917)",
-    
-    "mâu thuẫn|đối lập|contradiction": "Mâu thuẫn là sự thống nhất và đấu tranh của các mặt đối lập trong mọi sự vật, hiện tượng.\n\n✨ Đặc điểm:\n• Mâu thuẫn là phổ biến, có mặt ở khắp nơi\n• Mâu thuẫn là nguồn gốc và động lực phát triển\n• Có mâu thuẫn chủ yếu và mâu thuẫn thứ yếu\n• Có mâu thuẫn đối kháng và không đối kháng\n\nGiải quyết đúng mâu thuẫn sẽ thúc đẩy sự phát triển.",
-    
-    "giai cấp|đấu tranh giai cấp|class struggle": "Đấu tranh giai cấp là động lực trực tiếp thúc đẩy sự phát triển của xã hội có giai cấp.\n\n⚔️ Các hình thức đấu tranh:\n• Đấu tranh kinh tế\n• Đấu tranh chính trị\n• Đấu tranh tư tưởng\n\nTrong xã hội tư bản chủ nghĩa, đấu tranh giai cấp diễn ra chủ yếu giữa giai cấp tư sản và giai cấp vô sản.",
-    
-    "chân lý|truth|sự thật": "Chân lý là sự phản ánh đúng đắn, khách quan hiện thực vào trong tư duy con người.\n\n🎯 Đặc điểm của chân lý:\n• Chân lý có tính khách quan\n• Chân lý có tính tuyệt đối và tương đối\n• Chân lý có tính cụ thể\n• Tiêu chuẩn của chân lý là thực tiễn",
-    
-    "phương thức sản xuất|mode of production": "Phương thức sản xuất là sự thống nhất giữa lực lượng sản xuất và quan hệ sản xuất.\n\n🏭 Lực lượng sản xuất bao gồm:\n• Con người lao động\n• Tư liệu lao động\n• Đối tượng lao động\n\n🤝 Quan hệ sản xuất là:\n• Quan hệ giữa người với người trong quá trình sản xuất\n• Được xác định bởi quan hệ sở hữu về tư liệu sản xuất",
-    
-    "cảm ơn|thank|thanks": "Rất vui được giúp bạn! Nếu bạn còn câu hỏi gì về triết học Mác-Lênin, đừng ngần ngại hỏi tôi nhé! 😊",
-    
-    "default": "Câu hỏi của bạn rất thú vị! Dựa vào những gì tôi biết về triết học Mác-Lênin, tôi khuyên bạn nên tìm hiểu thêm về:\n\n• Duy vật biện chứng\n• Duy vật lịch sử\n• Vai trò của thực tiễn\n• Các quy luật biện chứng\n• Đấu tranh giai cấp\n\nBạn có thể hỏi tôi về bất kỳ chủ đề nào trong số này!"
-  };
 
-  const getBotResponse = (userInput) => {
-    const input = userInput.toLowerCase().trim();
-    
-    for (const [keywords, response] of Object.entries(knowledgeBase)) {
-      if (keywords === 'default') continue;
-      const keywordList = keywords.split('|');
-      if (keywordList.some(keyword => input.includes(keyword))) {
-        return response;
+  const sendMessage = async (message) => {
+    try {
+      setIsLoading(true);
+      
+      const response = await fetch(API_CONFIG.CHAT_API, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: message
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      const data = await response.json();
+      
+      if (data.success) {
+        return {
+          text: data.answer_markdown || data.answer || 'Xin lỗi, tôi không thể trả lời câu hỏi này.',
+          isBot: true,
+          sources: data.sources || [],
+          confidence: data.confidence,
+          domain: data.domain
+        };
+      } else {
+        throw new Error(data.error || 'Có lỗi xảy ra khi xử lý câu hỏi');
+      }
+    } catch (error) {
+      console.error('Error calling API:', error);
+      return {
+        text: 'Xin lỗi, có lỗi xảy ra khi kết nối với server. Vui lòng thử lại sau.',
+        isBot: true,
+        error: true
+      };
+    } finally {
+      setIsLoading(false);
     }
-    
-    return knowledgeBase.default;
   };
 
-  const handleSend = () => {
-    if (inputText.trim() === '') return;
+  const handleSend = async () => {
+    if (inputText.trim() === '' || isLoading) return;
 
-    // Add user message
     const userMessage = { text: inputText, isBot: false };
     setMessages(prev => [...prev, userMessage]);
 
-    // Get bot response
-    setTimeout(() => {
-      const botResponse = getBotResponse(inputText);
-      const botMessage = { text: botResponse, isBot: true };
-      setMessages(prev => [...prev, botMessage]);
-    }, 500);
+    // Thêm message loading
+    const loadingMessage = { text: 'Đang suy nghĩ...', isBot: true, isLoading: true };
+    setMessages(prev => [...prev, loadingMessage]);
+
+    const botResponse = await sendMessage(inputText);
+    
+    // Xóa loading message và thêm response
+    setMessages(prev => {
+      const filtered = prev.filter(msg => !msg.isLoading);
+      return [...filtered, botResponse];
+    });
 
     setInputText('');
   };
@@ -84,10 +95,10 @@ function Chatbot() {
   };
 
   const quickQuestions = [
-    "Duy vật biện chứng là gì?",
-    "Ai là Karl Marx?",
-    "Thực tiễn là gì?",
-    "Giải thích về mâu thuẫn"
+    "6 Đặc điểm của Nhà nước pháp quyền xã hội chủ nghĩa Việt Nam là gì?",
+    "Dân chủ xã hội chủ nghĩa là gì?",
+    "Vai trò của Nhà nước trong xã hội số?",
+    "Yêu cầu đối với sinh viên FPT trong xây dựng Nhà nước pháp quyền?"
   ];
 
   const handleQuickQuestion = (question) => {
@@ -113,6 +124,7 @@ function Chatbot() {
                 key={index}
                 onClick={() => handleQuickQuestion(question)}
                 className="quick-button"
+                disabled={isLoading}
               >
                 {question}
               </button>
@@ -128,9 +140,41 @@ function Chatbot() {
             >
               {message.isBot && <div className="message-avatar">🤖</div>}
               <div className="message-content">
-                {message.text.split('\n').map((line, i) => (
-                  <p key={i}>{line}</p>
-                ))}
+                {message.isLoading ? (
+                  <div className="loading-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+                ) : (
+                  <>
+                    <div className="markdown-content">
+                      <ReactMarkdown>{message.text}</ReactMarkdown>
+                    </div>
+                    {message.sources && message.sources.length > 0 && (
+                      <div className="message-sources">
+                        <strong>Nguồn tham khảo:</strong>
+                        <ul>
+                          {message.sources.map((source, idx) => (
+                            <li key={idx}>{source}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {message.confidence !== undefined && (
+                      <div className="message-confidence">
+                        <span className="confidence-label">Độ tin cậy:</span>
+                        <div className="confidence-bar">
+                          <div 
+                            className="confidence-fill" 
+                            style={{ width: `${message.confidence * 100}%` }}
+                          ></div>
+                        </div>
+                        <span className="confidence-value">{Math.round(message.confidence * 100)}%</span>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
               {!message.isBot && <div className="message-avatar">👤</div>}
             </div>
@@ -143,11 +187,16 @@ function Chatbot() {
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Nhập câu hỏi của bạn..."
+            placeholder={isLoading ? "Đang xử lý..." : "Nhập câu hỏi của bạn..."}
             rows="2"
+            disabled={isLoading}
           />
-          <button onClick={handleSend} className="send-button">
-            ✈️ Gửi
+          <button 
+            onClick={handleSend} 
+            className="send-button"
+            disabled={isLoading || inputText.trim() === ''}
+          >
+            {isLoading ? '⏳' : '✈️'} {isLoading ? 'Đang xử lý...' : 'Gửi'}
           </button>
         </div>
       </div>
