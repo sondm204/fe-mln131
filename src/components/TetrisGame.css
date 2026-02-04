@@ -17,7 +17,7 @@
   max-width: 1200px;
   width: 100%;
   justify-content: center;
-  align-items: flex-start;
+  align-items: stretch; /* Đảm bảo các cột cao bằng nhau */
 }
 
 /* --- GLASS STYLE --- */
@@ -134,6 +134,12 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
+}
+
+/* Ba cột có chiều cao linh hoạt nhưng luôn bằng nhau theo flex */
+.tetris-sidebar,
+.game-center-column {
+  flex: 1 1 0;
 }
 
 .game-board {

@@ -75,7 +75,8 @@ function TetrisGame() {
 
   const startGame = () => {
     setStage(createStage());
-    setDropTime(1000);
+    // Thời gian rơi ban đầu (ms) - giảm để rơi nhanh hơn
+    setDropTime(200);
     setGameState('playing'); // Chuyển sang trạng thái chơi
     setScore(0);
     setRowsCleared(0);
@@ -88,9 +89,10 @@ function TetrisGame() {
   };
 
   const drop = () => {
-    // Tăng tốc độ
+    // Tăng tốc độ rơi theo số hàng đã xóa (nhanh hơn trước)
     if (rowsCleared > (score + 1) * 5) {
-      setDropTime(1000 / (rowsCleared / 5 + 1) + 200);
+      const newSpeed = 700 / (rowsCleared / 5 + 1) + 100;
+      setDropTime(Math.max(120, newSpeed));
     }
     
     if (!checkCollision(player, stage, { x: 0, y: 1 })) {
@@ -203,7 +205,14 @@ function TetrisGame() {
     }
   }, [gameState, dropTime, drop]);
 
-  const move = ({ keyCode }) => {
+  const move = (e) => {
+    const { keyCode } = e;
+
+    // Ngăn trang cuộn khi dùng phím mũi tên để chơi
+    if ([37, 38, 39, 40].includes(keyCode) && e.cancelable) {
+      e.preventDefault();
+    }
+
     if (gameState === 'playing') {
       if (keyCode === 37) movePlayer(-1);
       else if (keyCode === 39) movePlayer(1);
@@ -281,29 +290,9 @@ function TetrisGame() {
               </div>
             )}
           </div>
-
-          {/* GAME CONTROLS */}
-          <div className={`game-controls glass-panel ${gameState !== 'playing' ? 'disabled' : ''}`}>
-            <div className="d-pad-row">
-              <button className="control-btn rotate-btn" onTouchStart={(e) => handleControl(e, () => playerRotate(stage, 1))} onClick={(e) => handleControl(e, () => playerRotate(stage, 1))} title="Xoay">
-                <Icons.Rotate />
-              </button>
-            </div>
-            <div className="d-pad-row">
-              <button className="control-btn" onTouchStart={(e) => handleControl(e, () => movePlayer(-1))} onClick={(e) => handleControl(e, () => movePlayer(-1))} title="Trái">
-                <Icons.Left />
-              </button>
-              <button className="control-btn" onTouchStart={(e) => handleControl(e, () => dropPlayer())} onClick={(e) => handleControl(e, () => dropPlayer())} title="Xuống">
-                <Icons.Down />
-              </button>
-              <button className="control-btn" onTouchStart={(e) => handleControl(e, () => movePlayer(1))} onClick={(e) => handleControl(e, () => movePlayer(1))} title="Phải">
-                <Icons.Right />
-              </button>
-            </div>
-          </div>
         </div>
 
-        {/* SIDEBAR PHẢI */}
+        {/* SIDEBAR PHẢI + GAME CONTROLS BÊN DƯỚI */}
         <div className="tetris-sidebar right">
           <div className="score-box glass-panel">
             <h3>Thành Tựu</h3>
@@ -322,6 +311,46 @@ function TetrisGame() {
 
             <div className="instructions">
               <p>Sử dụng nút trên màn hình hoặc bàn phím (⬅️ ⬇️ ➡️ ⬆️) để sắp xếp các khối.</p>
+            </div>
+          </div>
+
+          {/* GAME CONTROLS */}
+          <div className={`game-controls glass-panel ${gameState !== 'playing' ? 'disabled' : ''}`}>
+            <div className="d-pad-row">
+              <button
+                className="control-btn rotate-btn"
+                onTouchStart={(e) => handleControl(e, () => playerRotate(stage, 1))}
+                onClick={(e) => handleControl(e, () => playerRotate(stage, 1))}
+                title="Xoay"
+              >
+                <Icons.Rotate />
+              </button>
+            </div>
+            <div className="d-pad-row">
+              <button
+                className="control-btn"
+                onTouchStart={(e) => handleControl(e, () => movePlayer(-1))}
+                onClick={(e) => handleControl(e, () => movePlayer(-1))}
+                title="Trái"
+              >
+                <Icons.Left />
+              </button>
+              <button
+                className="control-btn"
+                onTouchStart={(e) => handleControl(e, () => dropPlayer())}
+                onClick={(e) => handleControl(e, () => dropPlayer())}
+                title="Xuống"
+              >
+                <Icons.Down />
+              </button>
+              <button
+                className="control-btn"
+                onTouchStart={(e) => handleControl(e, () => movePlayer(1))}
+                onClick={(e) => handleControl(e, () => movePlayer(1))}
+                title="Phải"
+              >
+                <Icons.Right />
+              </button>
             </div>
           </div>
         </div>
