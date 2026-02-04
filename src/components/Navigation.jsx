@@ -5,6 +5,7 @@ function Navigation({ onNavigate, currentPage }) {
     { id: 'home', label: '🏠 Trang Chủ', color: '#0071e3' },
     { id: 'info', label: '📖 Kiến Thức', color: '#0071e3' },
     { id: 'quiz', label: '🎮 Trắc Nghiệm', color: '#34c759' },
+    { id: 'game', label: '🧩 Xây Dựng', color: '#ff9500' },
     { id: 'chatbot', label: '🤖 Trợ Lý AI', color: '#af52de' }
   ];
 
