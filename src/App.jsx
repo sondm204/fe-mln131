@@ -5,6 +5,7 @@ import HomePage from './components/HomePage';
 import InfoPage from './components/InfoPage';
 import QuizGame from './components/QuizGame';
 import Chatbot from './components/Chatbot';
+import TetrisGame from './components/TetrisGame';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -19,6 +20,8 @@ function App() {
         return <QuizGame />;
       case 'chatbot':
         return <Chatbot />;
+      case 'game':
+        return <TetrisGame />;
       default:
         return <HomePage onNavigate={setCurrentPage} />;
     }
