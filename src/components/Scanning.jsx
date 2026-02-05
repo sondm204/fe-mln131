@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./Scanning.css";
+import { API_BASE_URL } from "../config/api";
 
-const BACKEND_BASE_URL = "http://localhost:3000";
 
 export default function Scanning() {
   const [url, setUrl] = useState("");
@@ -33,7 +33,7 @@ export default function Scanning() {
     try {
       setLoading(true);
 
-      const res = await fetch(`${BACKEND_BASE_URL}/urlscan/scan`, {
+      const res = await fetch(`${API_BASE_URL}/urlscan/scan`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -230,7 +230,7 @@ export default function Scanning() {
               <div className="scanning-section" style={{ marginTop: "12px" }}>
                 <div className="scanning-section-title">Ảnh chụp màn hình</div>
                 <img
-                  src={`${BACKEND_BASE_URL}/urlscan/screenshot/${result.scanId}`}
+                  src={`${API_BASE_URL}/urlscan/screenshot/${result.scanId}`}
                   alt="URL screenshot"
                   className="scanning-screenshot"
                 />
