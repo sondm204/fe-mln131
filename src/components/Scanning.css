@@ -1,0 +1,246 @@
+.scanning-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at top, #e0f2fe, #f9fafb, #e5e7eb);
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.scanning-card {
+  width: 100%;
+  max-width: 720px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.08),
+    0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  padding: 24px 28px 28px;
+}
+
+.scanning-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #0f172a;
+}
+
+.scanning-subtitle {
+  margin-bottom: 20px;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.scanning-link {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.scanning-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.scanning-input {
+  flex: 1;
+  min-width: 220px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  outline: none;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.scanning-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.scanning-button {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: none;
+  background-color: #2563eb;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.scanning-button:disabled {
+  background-color: #9ca3af;
+  cursor: default;
+}
+
+.scanning-spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  animation: scanning-spin 0.9s linear infinite;
+}
+
+@keyframes scanning-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.scanning-message {
+  padding: 14px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  border: 1px dashed #e5e7eb;
+  background-color: #f9fafb;
+  color: #6b7280;
+}
+
+.scanning-message.loading {
+  border-style: solid;
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.scanning-message.error {
+  border-style: solid;
+  border-color: #fecaca;
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+.scanning-verdict {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.scanning-verdict.safe {
+  background-color: #ecfdf3;
+  border-color: #bbf7d0;
+}
+
+.scanning-verdict.warning {
+  background-color: #fffbeb;
+  border-color: #fef3c7;
+}
+
+.scanning-verdict.danger {
+  background-color: #fef2f2;
+  border-color: #fecaca;
+}
+
+.scanning-verdict-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.scanning-verdict-text {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.scanning-verdict-text.safe {
+  color: #166534;
+}
+
+.scanning-verdict-text.warning {
+  color: #92400e;
+}
+
+.scanning-verdict-text.danger {
+  color: #b91c1c;
+}
+
+.scanning-badge {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background-color: #ffffff;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  color: #4b5563;
+}
+
+.scanning-section {
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 14px 14px 10px;
+  margin-bottom: 12px;
+}
+
+.scanning-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+.scanning-section-body {
+  font-size: 13px;
+  color: #4b5563;
+}
+
+.scanning-section-row {
+  margin-bottom: 4px;
+}
+
+.scanning-stats-grid {
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 14px 14px 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.scanning-stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b7280;
+  margin-bottom: 2px;
+}
+
+.scanning-stat-value {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.scanning-stat-value.positive {
+  color: #16a34a;
+}
+
+.scanning-stat-value.negative {
+  color: #b91c1c;
+}
+
+.scanning-screenshot {
+  width: 100%;
+  max-height: 420px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  object-fit: cover;
+  background-color: #f3f4f6;
+}
+
+
